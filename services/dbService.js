@@ -26,7 +26,7 @@ export const dbService = {
         return rows.affectedRows
     },
    async getShare({fileId,userId}){
-         const [rows] = await db.query("select token from share where userId = ? and fileId = ?",[userId,fileId]);
+         const [rows] = await db.query("select token from share where fileId = ?",[fileId]);
         return rows[0].token
     },
    async updateShare({fileId,userId,token}){

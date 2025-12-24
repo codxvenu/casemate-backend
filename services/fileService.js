@@ -43,9 +43,9 @@ export const FileService = {
   //          return {success : "false" , error : error.message}
   //     }
   // },
-  async previewfile(name) {
+  async previewfile(name,userId) {
     const secret = CreateSecretSha256(name);
-    const url = `https://api.casemate.icu/signed/?file=${name}&expires=${secret.expiry}&signature=${secret.signature}`;
+    const url = `https://api.casemate.icu/signed/?user=${userId}&file=${name}&expires=${secret.expiry}&signature=${secret.signature}`;
     return { success: true, url };
   },
   async share(fileId, filename, userId,allowedUsers,sharetype) {
@@ -76,14 +76,14 @@ export const FileService = {
   },
   async getFileAccess(userId, token) {
     const data = jwt.verify(token, env.jwtSecret);
-    const dbtoken = await dbService.getShare({ fileId: data.fileId, userId });
+    const dbtoken = await dbService.getShare({ fileId: data.fileId});
     if(token !== dbtoken) return {status : false , message : "Access Revoked"}
     if (data.mode === "public"){
-        return FileService.previewfile(data.filename);
+        return FileService.previewfile(data.filename,data.userId);
     }
      if(data.mode === "guest" ){
         if(data.allowedUsers.includes(userId) || data.userId === userId){
-        return FileService.previewfile(data.filename);
+        return FileService.previewfile(data.filename,data.userId);
         }
     }
     return {status : false,error : "Access Denied"}

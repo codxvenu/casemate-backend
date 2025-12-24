@@ -9,8 +9,8 @@ import { CreateFolderSchema, deleteSchema, PreviewSchema, RenameSchema, uploadSc
 const router = Router()
 router.use(authMiddleware)
 router.post("/upload",upload.single("file"),validator(uploadSchema),asyncHandler(async(req,res)=>{
-    const fileData = req?.validated?.body.fileData;
-    const userId = req?.validated?.userId
+    const fileData = req?.validated.body.fileData;
+    const userId = req?.validated?.user.id
     const storedName = req?.storedName
     const type = req?.type
     const result = await FileService.upload({...fileData,userId,storedName,type})
@@ -36,7 +36,6 @@ router.get("/rename",validator(RenameSchema),asyncHandler(async(req,res)=>{
 router.get("/previewFile",validator(PreviewSchema),asyncHandler(async(req,res)=>{
     const {name} = req?.validated.query
     const result = await FileService.previewfile(name)
-    
     res.status(200).json(result)
 }))
 router.post("/share",validator(AddShareSchema),asyncHandler(async(req,res)=>{

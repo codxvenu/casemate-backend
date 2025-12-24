@@ -4,6 +4,7 @@ import { erroHandler } from "./middleware/errorHandler.js"
 import cors from "cors"
 import { env } from "./config/env.js"
 import cookieParser from "cookie-parser"
+import { constants } from "./config/constants.js"
 const app = express()
 
 app.use(express.json())

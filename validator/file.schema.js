@@ -50,5 +50,5 @@ export const getFileAccessSchema = z.object({
   query: z.object({
     token: z.string(),
   }),
-  userId: z.coerce.number(),
+  userId: z.coerce.number().optional(),
 });
